@@ -5,6 +5,10 @@ module Control.Category.Dual where
 import Prelude (Eq, Ord, Read, Show, Bounded, ($))
 
 import Control.Category
+import Data.Bifunctor
+import Data.Bifoldable
+import Data.Bitraversable
+import Data.Functor
 import Data.Functor.Classes
 import Data.Semigroup (Semigroup)
 import Data.Monoid (Monoid)
@@ -26,3 +30,13 @@ instance Read2 k => Read2 (Dual k) where
 instance Show2 k => Show2 (Dual k) where
     liftShowsPrec2 asp asl bsp bsl n =
         showsUnaryWith (liftShowsPrec2 bsp bsl asp asl) "Dual" n . dual
+
+instance Bifunctor k => Bifunctor (Dual k) where
+    bimap f g = Dual . bimap g f . dual
+
+instance Bifoldable k => Bifoldable (Dual k) where
+    bifold = bifold . dual
+    bifoldMap f g = bifoldMap g f . dual
+
+instance Bitraversable k => Bitraversable (Dual k) where
+    bitraverse f g = fmap Dual . bitraverse g f . dual
