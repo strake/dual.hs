@@ -1,5 +1,4 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-
+{-# LANGUAGE DerivingVia #-}
 module Control.Category.Dual where
 
 import Prelude (Eq, Ord, Read, Show, Bounded, ($))
@@ -14,7 +13,8 @@ import Data.Semigroup (Semigroup)
 import Data.Monoid (Monoid)
 
 newtype Dual k a b = Dual { dual :: k b a }
-  deriving (Eq, Ord, Read, Show, Bounded, Semigroup, Monoid)
+  deriving (Eq, Ord, Read, Show)
+  deriving (Bounded, Semigroup, Monoid) via (k b a)
 
 instance Category k => Category (Dual k) where
     id = Dual id
